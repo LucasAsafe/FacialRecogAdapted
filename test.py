@@ -12,17 +12,17 @@ import cv2
 video_capture = cv2.VideoCapture(0)
 
 # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file("lucas.jpg")
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+lucasface = face_recognition.load_image_file("lucas.jpg")
+lucasface_encoding = face_recognition.face_encodings(lucasface)[0]
 
 # Load a second sample picture and learn how to recognize it.
-biden_image = face_recognition.load_image_file("lucas1.jpg")
-biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+lucasinsta = face_recognition.load_image_file("lucas1.jpg")
+lucasinsta_encoding = face_recognition.face_encodings(lucasinsta)[0]
 
 # Create arrays of known face encodings and their names
 known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
+    lucasface_encoding,
+    lucasinsta_encoding
 ]
 known_face_names = [
     "Lucas Asafe Face",
