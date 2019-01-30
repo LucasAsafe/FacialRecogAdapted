@@ -19,14 +19,37 @@ lucasface_encoding = face_recognition.face_encodings(lucasface)[0]
 lucasinsta = face_recognition.load_image_file("lucas1.jpg")
 lucasinsta_encoding = face_recognition.face_encodings(lucasinsta)[0]
 
+paulo = face_recognition.load_image_file("paulo.png")
+paulo_encoding = face_recognition.face_encodings(paulo)[0]
+
+suzy = face_recognition.load_image_file("suzy.jpeg")
+suzy_encoding = face_recognition.face_encodings(suzy)[0]
+
+barbara = face_recognition.load_image_file("barbara.jpeg")
+barbara_encoding = face_recognition.face_encodings(barbara)[0]
+
+antonio = face_recognition.load_image_file("antonio.jpeg")
+antonio_encoding = face_recognition.face_encodings(antonio)[0]
+
+florencia = face_recognition.load_image_file("florencia.jpeg")
+florencia_encoding = face_recognition.face_encodings(florencia)[0]
+
 # Create arrays of known face encodings and their names
 known_face_encodings = [
     lucasface_encoding,
-    lucasinsta_encoding
+    paulo_encoding,
+    suzy_encoding,
+    barbara_encoding,
+    antonio_encoding,
+    florencia_encoding
 ]
 known_face_names = [
-    "Lucas Asafe Face",
-    "Lucas asafe insta"
+    "Lucas",
+    "Paulo",
+    "Suzy",
+    "Barbara",
+    "Antonio",
+    "Florencia"
 ]
 
 while True:
@@ -47,9 +70,6 @@ while True:
          
         name = "Unknown"
 
-        print('Face que tá aparecendo',face_encoding)
-        print('know face',known_face_encodings)
-        print('matches',matches)
         # If a match was found in known_face_encodings, just use the first one.
         if True in matches:
             first_match_index = matches.index(True)
