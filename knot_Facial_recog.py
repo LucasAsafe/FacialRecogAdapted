@@ -1,7 +1,7 @@
 import face_recognition
 import cv2
 import socket
-
+from knotpy import *
 # This is a super simple (but slow) example of running face recognition on live video from your webcam.
 # There's a second example that's a little more complicated but runs faster.
 
@@ -9,6 +9,17 @@ import socket
 # OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 
+credentials = {
+	'uuid': '5e2d5dfd-e2e1-4b40-8a06-6f0a0b020000',
+	'token': 'a608e9732ad03b92d3cbf1845e3dab4542a7b873',
+	'servername': 'localhost',
+	'port': 3000
+}
+conn = KnotConnection('socketio', credentials)
+
+myThings = conn.myDevices()
+
+conn = KnotConnection('socketio', credentials)
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
 
@@ -57,15 +68,7 @@ known_face_names = [
     "Florencia",
     "Anderson"
 ]
-
-HOST = '127.0.0.1'     # Endereco IP do Servidor
-PORT = 8884            # Porta que o Servidor esta
-tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-dest = (HOST, PORT)
-tcp.connect(dest)
-print ('Para sair use CTRL+X\n')
-
-
+name = "Unknown"
 while True:
     # Grab a single frame of video
     ret, frame = video_capture.read()
@@ -77,20 +80,48 @@ while True:
     face_locations = face_recognition.face_locations(rgb_frame)
     face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
 
+   
     # Loop through each face in this frame of video
     for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
         # See if the face is a match for the known face(s)
         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-
-         
-        name = "Unknown"
+        
 
         # If a match was found in known_face_encodings, just use the first one.
         if True in matches:
-            first_match_index = matches.index(True)
+            first_match_index = matches.index(True)   
+            name1 = name              
             name = known_face_names[first_match_index]
+
+            if name1 != name:   
+                print("Enviando para o knot mesmo que esteja igual hahahahahahahah")
+                for thing in myThings:
+                    # print(thing)
+                    # print(60*'-')
+                    # print('DATA')
+                    data = conn.setData(thing['uuid'],1,True)
+                    print(data)
+                    '''print('Set data')
+                    if thing.get('schema'):
+                        for sensor in thing.get('schema'):
+                            if sensor['name'] == 'LED':
+                                conn.setData(thing['uuid'], sensor['sensor_id'], True)
+                    print(60*'*')'''
         else:
-            
+            name = "Unknown"
+            print("aqui e o else pro Unknown")
+            for thing in myThings:
+                print(thing)
+                print(60*'-')
+                print('DATA')
+                data = conn.setData(thing['uuid'],1,False)
+                print(data)
+                '''print('Set data')
+                if thing.get('schema'):
+                    for sensor in thing.get('schema'):
+                        if sensor['name'] == 'LED':
+                            conn.setData(thing['uuid'], sensor['sensor_id'], True)
+                print(60*'*')'''
 
         # Draw a box around the face
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
