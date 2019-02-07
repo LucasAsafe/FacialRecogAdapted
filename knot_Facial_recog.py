@@ -2,6 +2,7 @@ import face_recognition
 import cv2
 import socket
 from knotpy import *
+import time
 # This is a super simple (but slow) example of running face recognition on live video from your webcam.
 # There's a second example that's a little more complicated but runs faster.
 
@@ -86,20 +87,24 @@ while True:
         # See if the face is a match for the known face(s)
         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
         
-
+        name1 = name
         # If a match was found in known_face_encodings, just use the first one.
         if True in matches:
-            first_match_index = matches.index(True)   
-            name1 = name              
+            first_match_index = matches.index(True)                
             name = known_face_names[first_match_index]
 
             if name1 != name:   
-                print("Enviando para o knot mesmo que esteja igual hahahahahahahah")
+                print("Nome eh diferente do nome anterior, enviando")
                 for thing in myThings:
                     # print(thing)
-                    # print(60*'-')
+                    print(60*'-')
                     # print('DATA')
                     data = conn.setData(thing['uuid'],1,True)
+                    time.sleep(0.5)
+                    data = conn.setData(thing['uuid'],2,False)
+                    time.sleep(3)
+                    data = conn.setData(thing['uuid'],1,False)
+                    # data2 = conn.setData(thing['uuid'],2,False)
                     print(data)
                     '''print('Set data')
                     if thing.get('schema'):
@@ -109,12 +114,17 @@ while True:
                     print(60*'*')'''
         else:
             name = "Unknown"
-            print("aqui e o else pro Unknown")
+            print("aqui eh o else pro Unknown")
             for thing in myThings:
                 print(thing)
                 print(60*'-')
-                print('DATA')
-                data = conn.setData(thing['uuid'],1,False)
+                print('DADOS')
+                data = conn.setData(thing['uuid'],2,True)
+                time.sleep(0.5)
+                data = conn.setData(thing['uuid'],1, False)
+                time.sleep(3)
+                data = conn.setData(thing['uuid'],2, False)
+                # data2 = conn.setData(thing['uuid'],1,False)
                 print(data)
                 '''print('Set data')
                 if thing.get('schema'):
